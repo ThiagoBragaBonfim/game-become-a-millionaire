@@ -1,94 +1,16 @@
 from random import  randint
-from colorama import init,Fore
+from funcoes import *
+from itens.propiedade import *
+from itens.trabalho import *
+from personalizacao import *
 
-init(autoreset=True)
-
-cor = {
-    'verde' : Fore.GREEN,
-    'vermelho' : Fore.RED,
-    'amarelo' : Fore.YELLOW,
-    'azul' :  Fore.BLUE,
-    'magenta': Fore.MAGENTA,
-    'reset' :  Fore.RESET,
-       }
-
-class Jogador:
-    def __init__(self,nome,saldo=0,renda=0,renda_trabalho=0,gasto=0,bonus=0):
-        self.nome = nome
-        self.saldo = saldo
-        self.propiedades = []
-        self.renda = renda
-        self.renda_trabalho = renda_trabalho
-        self.trabalhos = []
-        self.gasto = gasto
-        self.bonus = bonus
-
-
-class Propiedade:
-    def __init__(self,nome,valor,renda,gasto=0):
-        self.nome = nome
-        self.valor = valor
-        self.renda = renda
-        self.gasto = gasto
-
-class Trabalho:
-    def __init__(self,nome,salario=0,bonus=0,rescisao=0):
-        self.nome = nome
-        self.salario = salario
-        self.rescisao = rescisao
-        self.bonus = bonus
-
-
-
-
-
-
-def linha(caracter="-",tamanho=30):
-    print(caracter*tamanho)
-
-def titulo(texto):
-    txt = texto.title()
-    print("-"*30)
-    print(txt)
-    print("-"*30)
 
 ganho_turno = 2000
 
-trabalho_simples = 1500
-trabalho_medio = 3000
-trabalho_dificil = 6000
-trabalho_imposivel = 12000
-
-
 #jogador
 quantidade_jogador = 1 #int(input("Informe a quantidade de jogador: "))
-
 saldo_base = 0  #(input("Defina um saldo base: "))
-
-#propiedade
-cafeteria = Propiedade("Cafeteria",80000,5000,2000)
-bar = Propiedade("Bar do Branco",45000,3500,1200)
-lanchonete = Propiedade("Lanchonete",150000,8500,6000)
-escola = Propiedade("Escola",480000,85000,35000)
-shopping1 = Propiedade("Minas Shopping",800000,280000,58000)
-shopping2 = Propiedade("Del Rey",650000,150000,36000)
-
 propiedades = [cafeteria,bar,lanchonete,escola,shopping1,shopping2]
-
-#Trabalho
-custo_trabalho = 100000
-
-vendedor =  Trabalho("Vendendor",3000,300)
-diretor =  Trabalho("Diretor",6000,100)
-uber =  Trabalho("Uber",1000,10,)
-professor =  Trabalho("Professor",5000,500)
-barista =  Trabalho("Barista",4500,350)
-
-trabalhos = [vendedor,diretor,uber,professor,barista]
-
-
-
-
 
 #jogadores (def)
 jogadores = []
@@ -195,9 +117,6 @@ while True:
                 print(f"{indice}.{job.nome}| Rescisão: 💵R${job.rescisao}")
             linha()
 
-
-
-
     #trabalhos
     if opc == 4:
         titulo("Trabalho")
@@ -293,7 +212,6 @@ while True:
                         print(f"{cor['vermelho']}Você errou :(, a resposta é {expressao}")
 
 
-
             else:
                 print(f"{cor['vermelho']}Você já fez um trabalho :)")
 
@@ -322,7 +240,6 @@ while True:
 
             else:
                 print(f"{cor['vermelho']}Você já esta contratado neste local :) ")
-
 
 
         #Demissão
