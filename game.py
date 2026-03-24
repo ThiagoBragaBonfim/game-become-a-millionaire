@@ -32,10 +32,10 @@ class Propiedade:
         self.gasto = gasto
 
 class Trabalho:
-    def __init__(self,nome,rescisao,salario=0,bonus=0):
+    def __init__(self,nome,salario=0,bonus=0,rescisao=0):
         self.nome = nome
         self.salario = salario
-        self.recisao = rescisao
+        self.rescisao = rescisao
         self.bonus = bonus
 
 
@@ -47,22 +47,23 @@ def linha(caracter="-",tamanho=30):
     print(caracter*tamanho)
 
 def titulo(texto):
+    txt = texto.title()
     print("-"*30)
-    print(texto)
+    print(txt)
     print("-"*30)
 
-ganho_turno = 20000
+ganho_turno = 2000
 
 trabalho_simples = 1500
-trabalho_medio = 4500
-trabalho_dificil = 18000
-trabalho_imposivel = 54000
+trabalho_medio = 3000
+trabalho_dificil = 6000
+trabalho_imposivel = 12000
 
 
 #jogador
 quantidade_jogador = 1 #int(input("Informe a quantidade de jogador: "))
 
-saldo_base = 100000000  #(input("Defina um saldo base: "))
+saldo_base = 0  #(input("Defina um saldo base: "))
 
 #propiedade
 cafeteria = Propiedade("Cafeteria",80000,5000,2000)
@@ -77,9 +78,9 @@ propiedades = [cafeteria,bar,lanchonete,escola,shopping1,shopping2]
 #Trabalho
 custo_trabalho = 100000
 
-vendedor =  Trabalho("Vendendor",3000)
+vendedor =  Trabalho("Vendendor",3000,300)
 diretor =  Trabalho("Diretor",6000,100)
-uber =  Trabalho("Uber",1000,10)
+uber =  Trabalho("Uber",1000,10,)
 professor =  Trabalho("Professor",5000,500)
 barista =  Trabalho("Barista",4500,350)
 
@@ -103,7 +104,8 @@ trabalho_realizado = False
 
 #jogo
 while True:
-    chance_bonus = 1 #randint(1, 10)
+    chance_bonus = randint(1, 10)
+    chance_rescisao = randint(1,4)
     jogador_atual = jogadores[turno]
     linha()
     print(f"""{cor['azul']}Vez do jogador {jogador_atual.nome}{cor['reset']}
@@ -151,7 +153,7 @@ while True:
                         jogador_atual.propiedades.append(propiedade_escolhida)
                         jogador_atual.renda += propiedade_escolhida.renda
                         jogador_atual.gasto += propiedade_escolhida.gasto
-                        print( f"Propiedade {cor['azul']}{propiedade_escolhida.nome}{cor['reset']} comprada com sucesso!!!")
+                        print( f"Propiedade {cor['azul']}{propiedade_escolhida.nome}{cor['reset']} foi comprada com sucesso!!!")
                         linha()
                         break
 
@@ -184,14 +186,14 @@ while True:
     -Renda (trabalhos): 💵R${jogador_atual.renda_trabalho} 
     -Bônus: 💵R${jogador_atual.bonus}
     -Ganho por turno : 💵R${ganho_turno+(jogador_atual.renda - jogador_atual.gasto)+jogador_atual.renda_trabalho}""")
-    linha()
-    if len(jogador_atual.trabalhos) > 0:
-        indice = 0
-        print("Trabalhos:")
-        for job in jogador_atual.trabalhos:
-            indice += 1
-            print(f"{indice}.{job.nome}")
         linha()
+        if len(jogador_atual.trabalhos) > 0:
+            indice = 0
+            print("Trabalhos:")
+            for job in jogador_atual.trabalhos:
+                indice += 1
+                print(f"{indice}.{job.nome}| Rescisão: 💵R${job.rescisao}")
+            linha()
 
 
 
@@ -203,11 +205,14 @@ while True:
         print("""
     [1] Trabalho de ganho imediato
     [2] Trabalho de ganho por turno
+    [3] Demissão
         """)
+
         #Trabalho de ganho imediato
         opc_trabalho = int(input(f"{cor['magenta']}>>> "))
 
         if opc_trabalho == 1:
+            titulo("Trabalho de ganho imediato")
             if trabalho_realizado == False:
                 print(f"""
             (1) Trabalho Simples (R${trabalho_simples})
@@ -292,7 +297,9 @@ while True:
             else:
                 print(f"{cor['vermelho']}Você já fez um trabalho :)")
 
+        #Trabalho de ganho por turno
         if opc_trabalho == 2:
+            titulo("Trabalho de ganho por turno")
             indice = 0
             for job in trabalhos:
                 indice += 1
@@ -316,6 +323,34 @@ while True:
             else:
                 print(f"{cor['vermelho']}Você já esta contratado neste local :) ")
 
+
+
+        #Demissão
+        if opc_trabalho == 3:
+            titulo("demissão")
+
+            if len(jogador_atual.trabalhos) > 0:
+                indice = 0
+
+                for job in jogador_atual.trabalhos:
+                    indice += 1
+                    print(f"{indice}.{job.nome}")
+                opc_demissao = int(input(">>> "))-1
+                demissao_escolhida = jogador_atual.trabalhos[opc_demissao]
+
+                if chance_rescisao == 1:
+                    jogador_atual.saldo += demissao_escolhida.rescisao
+                    print(f"{cor['verde']}Você ganhou a rescisão!!!")
+
+                else:
+                    print(f"{cor['vermelho']}Você não ganhou a rescisão")
+
+                jogador_atual.trabalhos.remove(demissao_escolhida)
+
+
+            else:
+                print(f"{cor['vermelho']}Você não tem nenhum trabalho")
+
     #pular
     if opc == 0:
         titulo("Pular")
@@ -327,5 +362,8 @@ while True:
                 print("Você ganhou o bônus do trabalho !!! :)")
                 for job in jogador_atual.trabalhos:
                     jogador_atual.saldo += job.bonus
+
+            for job in jogador_atual.trabalhos:
+                job.rescisao += (job.salario * .1)
         if turno >= len(jogadores):
             turno = 0
