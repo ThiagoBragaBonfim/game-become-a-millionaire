@@ -1,8 +1,8 @@
 from random import  randint
-from funcoes import *
+from itens.funcoes import *
 from itens.propiedade import *
 from itens.trabalho import *
-from personalizacao import *
+from itens.personalizacao import *
 
 
 ganho_turno = 2000

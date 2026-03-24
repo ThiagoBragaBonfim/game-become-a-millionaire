@@ -1,4 +1,4 @@
-from classes import *
+from itens.classes import *
 
 custo_trabalho = 100000
 

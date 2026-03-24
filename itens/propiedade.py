@@ -1,5 +1,5 @@
 #propiedade
-from classes import Propiedade
+from itens.classes import Propiedade
 
 cafeteria = Propiedade("Cafeteria",80000,5000,2000)
 bar = Propiedade("Bar do Branco",45000,3500,1200)
