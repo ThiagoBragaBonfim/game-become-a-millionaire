@@ -10,3 +10,5 @@ cor = {
     'magenta': Fore.MAGENTA,
     'reset' :  Fore.RESET,
        }
+
+# getattr

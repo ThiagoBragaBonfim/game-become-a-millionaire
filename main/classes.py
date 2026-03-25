@@ -9,6 +9,14 @@ class Jogador:
         self.gasto = gasto
         self.bonus = bonus
 
+    def atualizar_saldo(self,valor):
+        self.saldo += valor
+
+    def atualizar_trabalho(self,tipo,valor):
+        if tipo == 1:
+            self.renda_trabalho += valor
+        if tipo == 2:
+            self.bonus += valor
 
 class Propiedade:
     def __init__(self,nome,valor,renda,gasto=0):
@@ -17,9 +25,15 @@ class Propiedade:
         self.renda = renda
         self.gasto = gasto
 
+
 class Trabalho:
     def __init__(self,nome,salario=0,bonus=0,rescisao=0):
         self.nome = nome
         self.salario = salario
         self.rescisao = rescisao
         self.bonus = bonus
+    def atualizar_rescisao(self):
+        self.rescisao += (self.salario*.1)
+        
+
+    

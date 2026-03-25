@@ -1,16 +1,18 @@
-from random import  randint
-from itens.funcoes import *
-from itens.propiedade import *
-from itens.trabalho import *
-from itens.personalizacao import *
-
+from main.classes import *
+from main.funcoes import *
+from itens.objetos.trabalho import *
+from itens.objetos.propiedade import *
+from personalizacao import *
 
 ganho_turno = 2000
+meta = 10**15
+
+
 
 #jogador
 quantidade_jogador = 1 #int(input("Informe a quantidade de jogador: "))
-saldo_base = 0  #(input("Defina um saldo base: "))
-propiedades = [cafeteria,bar,lanchonete,escola,shopping1,shopping2]
+saldo_base = 1000000  #(input("Defina um saldo base: "))
+
 
 #jogadores (def)
 jogadores = []
@@ -29,13 +31,17 @@ while True:
     chance_bonus = randint(1, 10)
     chance_rescisao = randint(1,4)
     jogador_atual = jogadores[turno]
+    if jogador_atual.saldo >= meta:
+        print("Você atingiu a meta :) !!!")
+        break
+
     linha()
     print(f"""{cor['azul']}Vez do jogador {jogador_atual.nome}{cor['reset']}
     {cor['verde']}Saldo: 💵R${jogador_atual.saldo}{cor['reset']}
     [1] Loja
     [2] Propiedades Adquiridas
     [3] Dados
-    [4] Trabalhos (em dev)
+    [4] Trabalhos
     [0] Pular
 """)
     opc = int(input(f"{cor['magenta']}>>> "))
@@ -57,7 +63,7 @@ while True:
                 linha("-",20)
                 indice += 1
             while True:
-                opc_compra = input(f"{cor['magenta']}Informe o número da propiedade que deseja comprar (digite 'cancelar' para cancelar a compra): ")
+                opc_compra = input(f"{cor['magenta']}Informe o número da propiedade que deseja comprar (digite 'cancelar' para cancelar a compra):{cor['reset']} ")
                 if opc_compra.lower() == 'cancelar':
                     print(f"{cor['vermelho']}Compra cancelada")
                     linha()
@@ -72,6 +78,10 @@ while True:
                     if jogador_atual.saldo >= propiedade_escolhida.valor:
 
                         jogador_atual.saldo -= propiedade_escolhida.valor
+
+                        # Edu
+                        # jogador_atual.atualiza_saldo(propiedade_escolhida.valor)
+
                         jogador_atual.propiedades.append(propiedade_escolhida)
                         jogador_atual.renda += propiedade_escolhida.renda
                         jogador_atual.gasto += propiedade_escolhida.gasto
@@ -98,7 +108,7 @@ while True:
                 print(f"{indice}.{prop.nome}")
         else:
             print(f"{cor['vermelho']}Você não possui nenhuma propiedade ainda :(")
-
+   
     #dados
     if opc == 3:
         titulo("Dados")
@@ -127,9 +137,9 @@ while True:
     [3] Demissão
         """)
 
-        #Trabalho de ganho imediato
         opc_trabalho = int(input(f"{cor['magenta']}>>> "))
 
+        #Trabalho de ganho imediato
         if opc_trabalho == 1:
             titulo("Trabalho de ganho imediato")
             if trabalho_realizado == False:
@@ -139,77 +149,43 @@ while True:
             (3) Trabalho Díficeis (R${trabalho_dificil})
             (4) Trabalho Imposivel (R${trabalho_imposivel})
              """)
-                opc_trabalho = int(input(f"{cor['magenta']}>>> "))
-
+                trabalho_realizado = True
+                opc_trabalho_imediato = int(input(f"{cor['magenta']}>>> "))
                 #trabalho simples
-                if opc_trabalho == 1:
+                if opc_trabalho_imediato == 1:
                     titulo("Trabalho Simples")
-                    num1 = randint(0,31)
-                    num2 = randint(0,31)
-                    num3 = randint(0,31)
-                    expressao = num1 + num2 - num3
-                    print(f"{num1} + {num2} - {num3}")
-                    resposta = int(input(f"{cor['magenta']}>>> "))
-                    if resposta == expressao:
-                        print("Você acertou :)!!!")
-                        jogador_atual.saldo += trabalho_simples
-                        trabalho_realizado = True
+                    resposta, resposta_jogador = gerar_expressao(1)
+                    if resposta_jogador == resposta:
+                        jogador_atual.atualizar_saldo(trabalho_simples)
                     else:
-                        print(f"{cor['vermelho']}Você errou :(, a resposta é {expressao}")
+                        print(f"A resposta é {resposta}")
 
                 #trabalho medio
-                if opc_trabalho == 2:
+                if opc_trabalho_imediato == 2:
                     titulo("Trabalho Médio")
-                    num1 = randint(0,11)
-                    num2 = randint(0,11)
-                    num3 = randint(0,31)
-                    num4 = randint(0,31)
-                    num5 = randint(0,31)
-                    expressao = num1 * num2 + (num3 + num4 + num5)
-                    print(f"{num1} * {num2} + ({num3} + {num4} + {num5})")
-                    resposta = int(input(f"{cor['magenta']}>>> "))
-                    if resposta == expressao:
-                        print("Você acertou :)!!!")
-                        jogador_atual.saldo += trabalho_medio
-                        trabalho_realizado = True
+                    resposta, resposta_jogador = gerar_expressao(2)
+                    if resposta_jogador == resposta:
+                        jogador_atual.atualizar_saldo(trabalho_medio)
                     else:
-                        print(f"{cor['vermelho']}Você errou :(, a resposta é {expressao}")
+                        print(f"A resposta é {resposta}")
 
                 #trabalho dificil
-                if opc_trabalho == 3:
+                if opc_trabalho_imediato == 3:
                     titulo("Trabalho Difícil")
-                    num1 = randint(0,6)
-                    num2 = randint(0,4)
-                    num3 = randint(0,31)
-                    num4 = randint(0,31)
-                    num5 = randint(0,31)
-                    expressao = num1 ** num2 + (num3 + num4 + num5)
-                    print(f"{num1} ** {num2} + ({num3} + {num4} + {num5})")
-                    resposta = int(input(f"{cor['magenta']}>>> "))
-                    if resposta == expressao:
-                        print("Você acertou :)!!!")
-                        jogador_atual.saldo += trabalho_dificil
-                        trabalho_realizado = True
+                    resposta, resposta_jogador = gerar_expressao(3)
+                    if resposta_jogador == resposta:
+                        jogador_atual.atualizar_saldo(trabalho_dificil)
                     else:
-                        print(f"{cor['vermelho']}Você errou :(, a resposta é {expressao}")
+                        print(f"A resposta é {resposta}")
 
                 #trabalho imposivel
-                if opc_trabalho == 4:
+                if opc_trabalho_imediato == 4:
                     titulo("Trabalho Impossivel")
-                    num1 = randint(0,11)
-                    num2 = randint(0,11)
-                    num3 = randint(0,31)
-                    num4 = randint(0,31)
-                    num5 = randint(0,31)
-                    expressao = num1 ** num2 * (num3 + (num4 + num5))
-                    print(f"{num1} ** {num2} * ({num3} + ({num4} + {num5})")
-                    resposta = int(input(f"{cor['magenta']}>>> "))
-                    if resposta == expressao:
-                        print("Você acertou :)!!!")
-                        jogador_atual.saldo += trabalho_imposivel
-                        trabalho_realizado = True
+                    resposta, resposta_jogador = gerar_expressao(4)
+                    if resposta_jogador == resposta:
+                        jogador_atual.atualizar_saldo(trabalho_imposivel)
                     else:
-                        print(f"{cor['vermelho']}Você errou :(, a resposta é {expressao}")
+                        print(f"A resposta é {resposta}")
 
 
             else:
@@ -221,18 +197,21 @@ while True:
             indice = 0
             for job in trabalhos:
                 indice += 1
-                print(f"{indice}.{job.nome},Salário: R${job.salario},Bônus; R${job.bonus}")
+                if job in jogador_atual.trabalhos:
+                    print(f"{indice}.{job.nome} (Já contratado)")
+                else:
+                    print(f"{indice}.{job.nome},Salário: R${job.salario},Bônus; R${job.bonus}")
                 linha()
-            opc_contrato = int(input(f"{cor['magenta']}Infomer o número do trabalho que deseja (custo de R${custo_trabalho}): "))-1
+            opc_contrato = int(input(f"{cor['magenta']}Infomer o número do trabalho que deseja (custo de R${custo_trabalho}):{cor['reset']} "))-1
             trabalho_escolhido = trabalhos[opc_contrato]
 
             if trabalho_escolhido not in jogador_atual.trabalhos:
 
                 if jogador_atual.saldo >= custo_trabalho:
-                    jogador_atual.saldo -= custo_trabalho
-                    jogador_atual.renda_trabalho += trabalho_escolhido.salario
+                    jogador_atual.atualizar_saldo(-custo_trabalho)
+                    jogador_atual.atualizar_trabalho(1,trabalho_escolhido.salario)
+                    jogador_atual.atualizar_trabalho(2,trabalho_escolhido.bonus)
                     jogador_atual.trabalhos.append(trabalho_escolhido)
-                    jogador_atual.bonus += trabalho_escolhido.bonus
                     print(f"Você foi contratado com o cargo de {cor['azul']}{trabalho_escolhido.nome}{cor['reset']} :)!")
 
                 else:
@@ -281,6 +260,6 @@ while True:
                     jogador_atual.saldo += job.bonus
 
             for job in jogador_atual.trabalhos:
-                job.rescisao += (job.salario * .1)
+                job.atualizar_rescisao()
         if turno >= len(jogadores):
             turno = 0
