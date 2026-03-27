@@ -18,7 +18,7 @@ saldo_base = 1000000  #(input("Defina um saldo base: "))
 jogadores = []
 
 for i in range(quantidade_jogador):
-    nome_jogador =  "Thiago" #input(f"Informe o nome do jogador {i+1}: ").title()
+    nome_jogador = "Thiago" #input(f"Informe o nome do jogador {i+1}: ").title()
     jogador = Jogador(nome_jogador,saldo_base)
     jogadores.append(jogador)
 
@@ -44,7 +44,7 @@ while True:
     [4] Trabalhos
     [0] Pular
 """)
-    opc = int(input(f"{cor['magenta']}>>> "))
+    opc = int(input(f"{cor['magenta']}>>> {cor["reset"]}"))
     linha()
 
     #loja
@@ -137,7 +137,7 @@ while True:
     [3] Demissão
         """)
 
-        opc_trabalho = int(input(f"{cor['magenta']}>>> "))
+        opc_trabalho = int(input(f"{cor['magenta']}>>> {cor["reset"]}"))
 
         #Trabalho de ganho imediato
         if opc_trabalho == 1:
@@ -150,7 +150,7 @@ while True:
             (4) Trabalho Imposivel (R${trabalho_imposivel})
              """)
                 trabalho_realizado = True
-                opc_trabalho_imediato = int(input(f"{cor['magenta']}>>> "))
+                opc_trabalho_imediato = int(input(f"{cor['magenta']}>>> {cor["reset"]}"))
                 #trabalho simples
                 if opc_trabalho_imediato == 1:
                     titulo("Trabalho Simples")
@@ -195,32 +195,41 @@ while True:
         if opc_trabalho == 2:
             titulo("Trabalho de ganho por turno")
             indice = 0
+
             for job in trabalhos:
                 indice += 1
+
                 if job in jogador_atual.trabalhos:
-                    print(f"{indice}.{job.nome} (Já contratado)")
+                    print(f"{cor['amarelo']}{indice}.{job.nome} (Contratado)")
+
+                elif job in jogador_atual.trabalho_demisao:
+                    print(f"{cor['vermelho']}{indice}.{job.nome} (Demitido)")
+
+
                 else:
                     print(f"{indice}.{job.nome},Salário: R${job.salario},Bônus; R${job.bonus}")
+
                 linha()
             opc_contrato = int(input(f"{cor['magenta']}Infomer o número do trabalho que deseja (custo de R${custo_trabalho}):{cor['reset']} "))-1
             trabalho_escolhido = trabalhos[opc_contrato]
+            if trabalho_escolhido not in jogador_atual.trabalho_demisao:
+                if trabalho_escolhido not in jogador_atual.trabalhos:
 
-            if trabalho_escolhido not in jogador_atual.trabalhos:
+                    if jogador_atual.saldo >= custo_trabalho:
 
-                if jogador_atual.saldo >= custo_trabalho:
-                    jogador_atual.atualizar_saldo(-custo_trabalho)
-                    jogador_atual.atualizar_trabalho(1,trabalho_escolhido.salario)
-                    jogador_atual.atualizar_trabalho(2,trabalho_escolhido.bonus)
-                    jogador_atual.trabalhos.append(trabalho_escolhido)
-                    print(f"Você foi contratado com o cargo de {cor['azul']}{trabalho_escolhido.nome}{cor['reset']} :)!")
+                        jogador_atual.atualizar_saldo(-custo_trabalho)
+                        jogador_atual.atualizar_trabalho(1,trabalho_escolhido.salario)
+                        jogador_atual.atualizar_trabalho(2,trabalho_escolhido.bonus)
+                        jogador_atual.trabalhos.append(trabalho_escolhido)
+                        print(f"Você foi contratado com o cargo de {cor['azul']}{trabalho_escolhido.nome}{cor['reset']} :)!")
+
+                    else:
+                        print(f"{cor['vermelho']}Saldo Insuficiente :(")
 
                 else:
-                    print(f"{cor['vermelho']}Saldo Insuficiente :(")
-
+                    print(f"{cor['vermelho']}Você já esta contratado neste local :) ")
             else:
-                print(f"{cor['vermelho']}Você já esta contratado neste local :) ")
-
-
+                print(f"{cor['vermelho']}Você foi demitido desse trabalho")
         #Demissão
         if opc_trabalho == 3:
             titulo("demissão")
@@ -233,9 +242,11 @@ while True:
                     print(f"{indice}.{job.nome}")
                 opc_demissao = int(input(">>> "))-1
                 demissao_escolhida = jogador_atual.trabalhos[opc_demissao]
+                jogador_atual.trabalho_demisao.append(demissao_escolhida)
 
                 if chance_rescisao == 1:
                     jogador_atual.saldo += demissao_escolhida.rescisao
+
                     print(f"{cor['verde']}Você ganhou a rescisão!!!")
 
                 else:

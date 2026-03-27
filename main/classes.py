@@ -4,9 +4,10 @@ class Jogador:
         self.saldo = saldo
         self.propiedades = []
         self.renda = renda
+        self.gasto = gasto
         self.renda_trabalho = renda_trabalho
         self.trabalhos = []
-        self.gasto = gasto
+        self.trabalho_demisao = []
         self.bonus = bonus
 
     def atualizar_saldo(self,valor):
@@ -24,8 +25,7 @@ class Propiedade:
         self.valor = valor
         self.renda = renda
         self.gasto = gasto
-
-
+     
 class Trabalho:
     def __init__(self,nome,salario=0,bonus=0,rescisao=0):
         self.nome = nome
@@ -33,7 +33,7 @@ class Trabalho:
         self.rescisao = rescisao
         self.bonus = bonus
     def atualizar_rescisao(self):
-        self.rescisao += (self.salario*.1)
+        self.rescisao += (self.salario*.25)
         
 
     
