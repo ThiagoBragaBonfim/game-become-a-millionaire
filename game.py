@@ -1,7 +1,7 @@
-from main.classes import *
-from main.funcoes import *
-from itens.objetos.trabalho import *
-from itens.objetos.propiedade import *
+from classes import *
+from funcoes import *
+from trabalho import *
+from propiedade import *
 from personalizacao import *
 
 ganho_turno = 2000
@@ -9,16 +9,25 @@ meta = 10**15
 
 
 
+
 #jogador
 quantidade_jogador = 1 #int(input("Informe a quantidade de jogador: "))
+
 saldo_base = 1000000  #(input("Defina um saldo base: "))
 
+qnt_propiedades = int(input("Informe a quantidade de porpiedades que terá no jogo: "))
+propiedades = gerar_empresas(qnt_propiedades)
 
+qtn_trabalhos = int(input("Informe a quantidade de trabalhos que terá no jogo: "))
+trabalhos = gerar_trabalhos(qtn_trabalhos)
+
+
+lista_teste = ["teste1"] #,"teste2","teste3","teste4"]
 #jogadores (def)
 jogadores = []
 
 for i in range(quantidade_jogador):
-    nome_jogador = "Thiago" #input(f"Informe o nome do jogador {i+1}: ").title()
+    nome_jogador = lista_teste[i]    #input(f"Informe o nome do jogador {i+1}: ").title()
     jogador = Jogador(nome_jogador,saldo_base)
     jogadores.append(jogador)
 
@@ -37,12 +46,14 @@ while True:
 
     linha()
     print(f"""{cor['azul']}Vez do jogador {jogador_atual.nome}{cor['reset']}
-    {cor['verde']}Saldo: 💵R${jogador_atual.saldo}{cor['reset']}
+    {cor['verde']}Saldo: 💰R${jogador_atual.saldo}{cor['reset']}
     [1] Loja
     [2] Propiedades Adquiridas
     [3] Dados
     [4] Trabalhos
+    [5] Pix
     [0] Pular
+    [9] finalizar jogo (testes)
 """)
     opc = int(input(f"{cor['magenta']}>>> {cor["reset"]}"))
     linha()
@@ -258,6 +269,22 @@ while True:
             else:
                 print(f"{cor['vermelho']}Você não tem nenhum trabalho")
 
+    if opc == 5:
+        titulo("pix")
+        indice = 0
+        for jogador in jogadores:
+            indice += 1
+            if jogador == jogador_atual:
+                pass
+            else:
+                print(f"{indice}.{jogador.nome}")
+        opc_pix = int(input("Informe o jogador que deseja trasferir dinheiro: "))-1
+        jogador_escolhido = jogadores[opc_pix]
+        valor = int(input("Informe o valor: R$"))
+        jogador_atual.atualizar_saldo(-valor)
+        jogador_escolhido.atualizar_saldo(valor)
+
+
     #pular
     if opc == 0:
         titulo("Pular")
@@ -273,4 +300,10 @@ while True:
             for job in jogador_atual.trabalhos:
                 job.atualizar_rescisao()
         if turno >= len(jogadores):
+           
             turno = 0
+
+
+    if opc == 9:
+        print("Jogo finalizado")
+        break
