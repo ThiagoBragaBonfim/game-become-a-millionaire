@@ -5,7 +5,8 @@ from propiedade import *
 from personalizacao import *
 
 ganho_turno = 2000
-meta = 10**15
+
+meta = 10**6
 
 
 
@@ -13,7 +14,7 @@ meta = 10**15
 #jogador
 quantidade_jogador = 1 #int(input("Informe a quantidade de jogador: "))
 
-saldo_base = 1000000  #(input("Defina um saldo base: "))
+saldo_base = 0
 
 qnt_propiedades = int(input("Informe a quantidade de porpiedades que terá no jogo: "))
 propiedades = gerar_empresas(qnt_propiedades)
@@ -22,7 +23,7 @@ qtn_trabalhos = int(input("Informe a quantidade de trabalhos que terá no jogo: 
 trabalhos = gerar_trabalhos(qtn_trabalhos)
 
 
-lista_teste = ["teste1"] #,"teste2","teste3","teste4"]
+lista_teste = ["Thiago"]
 #jogadores (def)
 jogadores = []
 
