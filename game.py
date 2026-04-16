@@ -13,9 +13,9 @@ def limpar_tela():
 quantidade_jogador = 2 #int(input("Informe a quantidade de jogador: "))
 
 
-qnt_propiedades = int(input("Informe a quantidade de porpiedades que terá no jogo: "))
+qnt_propiedades = 20 #int(input("Informe a quantidade de porpiedades que terá no jogo: "))
 
-qtn_trabalhos = int(input("Informe a quantidade de trabalhos que terá no jogo: "))
+qtn_trabalhos = 20 #int(input("Informe a quantidade de trabalhos que terá no jogo: "))
 
 lista_teste = ["Thiago","eduardo"]
 
@@ -35,27 +35,34 @@ num_turno = 1
 trabalhos = gerar_trabalhos(qtn_trabalhos)
 
 propiedades = gerar_empresas(qnt_propiedades)
-
+    # listas,dicionarios e tuplas
 jogadores = []
+
+prop_dic = {}
+
+lista_keys = []
+lista_nome_dono = []
+    #fim
 
     #jogadores (def)
 for i in range(quantidade_jogador):
     nome_jogador = lista_teste[i].title()    #input(f"Informe o nome do jogador {i+1}: ").title()
     jogador = Jogador(nome_jogador,saldo_base)
     jogadores.append(jogador)
-
+    #fim
 
 limpar_tela()
+#fim
+
 #jogo
 while True:
-
     jogador_atual = jogadores[turno]
 
     chance_bonus = randint(1, 10)
     chance_rescisao = randint(1,4)
 
     if jogador_atual.saldo >= meta:
-        print("Você atingiu a meta :) !!!")
+        print(f"{jogador_atual.nome} atigiu a meta e ganhou o jogo !!!!!")
         break
 
     linha()
@@ -83,15 +90,17 @@ while True:
 
         if len(jogador_atual.propiedades) < len(propiedades):
 
-
-
             for propiedade in propiedades:
 
-                if propiedade in jogador_atual.propiedades:
+                if propiedade.dono == jogador_atual.nome:
                     print(f"{indice}.{propiedade.nome} (adquirido) ")
+                
+                elif propiedade.dono:
+                    print(f"{indice}.{propiedade.nome} (dono: {propiedade.dono})")
 
                 else:
                     print(f"{indice}.{propiedade.nome}|Valor: R${propiedade.valor}|Renda: R${propiedade.renda}|Custo por turno: R${propiedade.gasto}")
+
                 linha("-",20)
                 indice += 1
             while True:
@@ -114,6 +123,8 @@ while True:
                     if jogador_atual.saldo >= propiedade_escolhida.valor:
 
                         jogador_atual.atualizar_saldo(-propiedade_escolhida.valor)
+                        
+                        propiedade_escolhida.dono = jogador_atual.nome
 
                     
                         jogador_atual.propiedades.append(propiedade_escolhida)
@@ -334,3 +345,5 @@ while True:
     if opc == 9:
         print("Jogo finalizado")
         break
+
+limpar_tela()

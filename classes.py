@@ -20,11 +20,12 @@ class Jogador:
             self.bonus += valor
 
 class Propiedade:
-    def __init__(self,nome,valor,renda,gasto=0):
+    def __init__(self,nome,valor,renda,gasto=0,dono=None):
         self.nome = nome
         self.valor = valor
         self.renda = renda
         self.gasto = gasto
+        self.dono = dono if dono else None
      
 class Trabalho:
     def __init__(self,nome,salario=0,bonus=0,rescisao=0):
