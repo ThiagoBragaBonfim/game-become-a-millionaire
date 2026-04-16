@@ -3,47 +3,57 @@ from funcoes import *
 from trabalho import *
 from propiedade import *
 from personalizacao import *
+import os
+from time import sleep
 
-ganho_turno = 2000
-
-meta = 10**80
-
-
-
+def limpar_tela():
+    os.system('cls')
 
 #jogador
-quantidade_jogador = 1 #int(input("Informe a quantidade de jogador: "))
+quantidade_jogador = 2 #int(input("Informe a quantidade de jogador: "))
 
-saldo_base = 999999999999
 
 qnt_propiedades = int(input("Informe a quantidade de porpiedades que terá no jogo: "))
-propiedades = gerar_empresas(qnt_propiedades)
 
 qtn_trabalhos = int(input("Informe a quantidade de trabalhos que terá no jogo: "))
-trabalhos = gerar_trabalhos(qtn_trabalhos)
+
+lista_teste = ["Thiago","eduardo"]
 
 
-lista_teste = ["Thiago"]
-#jogadores (def)
-jogadores = []
+#inicialização
+ganho_turno = 2000
 
-for i in range(quantidade_jogador):
-    nome_jogador = lista_teste[i]    #input(f"Informe o nome do jogador {i+1}: ").title()
-    jogador = Jogador(nome_jogador,saldo_base)
-    jogadores.append(jogador)
+meta = 10**15
 
+saldo_base = 10**9
 turno = 0
 
 trabalho_realizado = False
 
 num_turno = 1
 
+trabalhos = gerar_trabalhos(qtn_trabalhos)
 
+propiedades = gerar_empresas(qnt_propiedades)
+
+jogadores = []
+
+    #jogadores (def)
+for i in range(quantidade_jogador):
+    nome_jogador = lista_teste[i].title()    #input(f"Informe o nome do jogador {i+1}: ").title()
+    jogador = Jogador(nome_jogador,saldo_base)
+    jogadores.append(jogador)
+
+
+limpar_tela()
 #jogo
 while True:
+
+    jogador_atual = jogadores[turno]
+
     chance_bonus = randint(1, 10)
     chance_rescisao = randint(1,4)
-    jogador_atual = jogadores[turno]
+
     if jogador_atual.saldo >= meta:
         print("Você atingiu a meta :) !!!")
         break
@@ -65,12 +75,16 @@ while True:
     linha()
 
     #loja
-    if opc == 1:
+    if opc == 1: 
+
         titulo("Loja")
         linha()
         indice = 0
 
         if len(jogador_atual.propiedades) < len(propiedades):
+
+
+
             for propiedade in propiedades:
 
                 if propiedade in jogador_atual.propiedades:
@@ -101,12 +115,11 @@ while True:
 
                         jogador_atual.atualizar_saldo(-propiedade_escolhida.valor)
 
-                        # Edu
-                        # jogador_atual.atualiza_saldo(propiedade_escolhida.valor)
-
+                    
                         jogador_atual.propiedades.append(propiedade_escolhida)
                         jogador_atual.renda += propiedade_escolhida.renda
                         jogador_atual.gasto += propiedade_escolhida.gasto
+
                         print( f"Propiedade {cor['azul']}{propiedade_escolhida.nome}{cor['reset']} foi comprada com sucesso!!!")
                         linha()
                         break
@@ -279,7 +292,6 @@ while True:
 
             else:
                 print(f"{cor['vermelho']}Você não tem nenhum trabalho")
-
     if opc == 5:
         titulo("pix")
         indice = 0
@@ -299,7 +311,7 @@ while True:
     #pular
     if opc == 0:
 
-        titulo("Pular")
+        limpar_tela()
         turno += 1
         jogador_atual.atualizar_saldo(ganho_turno + (jogador_atual.renda - jogador_atual.gasto))
         jogador_atual.atualizar_saldo(jogador_atual.renda_trabalho)
@@ -318,7 +330,6 @@ while True:
         if turno >= len(jogadores):
             num_turno += 1
             turno = 0
-
 
     if opc == 9:
         print("Jogo finalizado")

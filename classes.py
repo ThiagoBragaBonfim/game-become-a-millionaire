@@ -35,5 +35,3 @@ class Trabalho:
     def atualizar_rescisao(self):
         self.rescisao += (self.salario*.25)
         
-
-    

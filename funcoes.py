@@ -3,7 +3,6 @@ from random import randint
 def linha(caracter="-",tamanho=30):
     print(caracter*tamanho)
 
-
 def titulo(texto):
     txt = texto.title()
     print("-"*30)
